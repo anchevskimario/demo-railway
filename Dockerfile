@@ -6,18 +6,12 @@ COPY pom.xml .
 RUN mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
 
 COPY src .
-
 RUN mvn -o --file pom.xml package -DskipTests -B
-COPY ./target/*.jar /app.jar
 
-#RUN java -Djarmode=layertools -jar ./target/*.jar extract
-#
-#FROM amazoncorretto:11-alpine3.21-jdk
-#COPY --from=build /app/dependencies ./
-#COPY --from=build /app/spring-boot-loader ./
-#COPY --from=build /app/snapshot-dependencies ./
-#COPY --from=build /app/application ./
+FROM amazoncorretto:21-alpine
 
-#EXPOSE 8080
-ENTRYPOINT ["java", "-jar","/app.jar"]
+# Copy the jar from the build stage
+COPY --from=build /app/target/*.jar /app/app.jar
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
