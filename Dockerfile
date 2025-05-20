@@ -8,7 +8,7 @@ RUN mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
 COPY src .
 
 RUN mvn -o --file pom.xml package -DskipTests -B
-COPY target/*.jar /app.jar
+COPY ./target/*.jar /app.jar
 
 #RUN java -Djarmode=layertools -jar ./target/*.jar extract
 #
